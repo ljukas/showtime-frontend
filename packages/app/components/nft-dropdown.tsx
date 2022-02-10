@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { Share } from "react-native";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useReport } from "app/hooks/use-report";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
+import { findListingItemByOwner } from "app/utilities";
 
 import { View, Button } from "design-system";
 import {
@@ -25,6 +27,8 @@ type Props = {
 
 function NFTDropdown({ nft }: Props) {
   const { userAddress } = useCurrentUserAddress();
+  // TODO: Is userAddress a possible sub?
+  const userId = useCurrentUserId();
   const [isOwner, setIsOwner] = useState(false);
 
   const { report } = useReport();
@@ -35,6 +39,8 @@ function NFTDropdown({ nft }: Props) {
       setIsOwner(nft.owner_address.toLowerCase() === userAddress.toLowerCase());
     }
   }, [nft, userAddress]);
+
+  const hasMatchingListing = findListingItemByOwner(nft, userId);
 
   const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
     (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
@@ -107,7 +113,7 @@ function NFTDropdown({ nft }: Props) {
           </DropdownMenuItem>
         )}
 
-        {isOwner && nft && (
+        {isOwner && !hasMatchingListing && (
           <DropdownMenuItem
             onSelect={() => router.push(`/nft/${nft.nft_id}/list`)}
             key="list"
@@ -115,6 +121,18 @@ function NFTDropdown({ nft }: Props) {
           >
             <DropdownMenuItemTitle tw="text-black dark:text-white">
               List
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        )}
+
+        {isOwner && hasMatchingListing && (
+          <DropdownMenuItem
+            onSelect={() => {}}
+            key="unlist"
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Unlist
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}

@@ -19,6 +19,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MMKV } from "react-native-mmkv";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { enableScreens } from "react-native-screens";
+import * as Sentry from "sentry-expo";
 import { SWRConfig } from "swr";
 import { useDeviceContext, useAppColorScheme } from "twrnc";
 
@@ -262,6 +263,11 @@ function AppContextProvider({
 
 function App() {
   useEffect(() => {
+    Sentry.init({
+      dsn: "https://a0b390d1d15543a8a85ab594eb4b0c50@o614247.ingest.sentry.io/5860034",
+      environment: process.env.STAGE,
+    });
+
     if (process.env.STAGE !== "development") {
       LogRocket.init("oulg1q/showtime", {
         redactionTags: ["data-private"],

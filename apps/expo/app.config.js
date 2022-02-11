@@ -116,5 +116,20 @@ export default {
     "./plugins/with-android-manifest.js",
     "@logrocket/react-native",
     "./plugins/with-hermes-ios-m1-workaround.js",
+    "sentry-expo",
   ],
+
+  // hooks: {
+  //   postPublish: [
+  //     {
+  //       file: "sentry-expo/upload-sourcemaps",
+  //       config: {
+  //         organization: "showtime",
+  //         project: "showtime-mobile",
+  //         authToken:
+  //           "2ed32928e0f84f92a62686ad7dedc87e655d30c93c5a4f85b7ccdfa385d5e27f",
+  //       },
+  //     },
+  //   ],
+  // },
 };

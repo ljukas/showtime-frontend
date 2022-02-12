@@ -1,6 +1,12 @@
+import { useContext, useRef } from "react";
 import { Platform } from "react-native";
 
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SharedElement,
+  SharedElementTransition,
+  nodeFromRef,
+} from "react-native-shared-element";
 import useSWR from "swr";
 import useUnmountSignal from "use-unmount-signal";
 
@@ -24,6 +30,8 @@ import { Media } from "design-system/media";
 import { PinchToZoom } from "design-system/pinch-to-zoom";
 import { tw } from "design-system/tailwind";
 
+import { SharedElementContext } from "../components/shared-element";
+
 type Query = {
   id: string;
 };
@@ -32,9 +40,11 @@ const { useParam } = createParam<Query>();
 
 function NftScreen() {
   const { top: topSafeArea } = useSafeAreaInsets();
+  const { setNode2, setNode2AncestorRef } = useContext(SharedElementContext);
   const router = useRouter();
   const unmountSignal = useUnmountSignal();
   const [nftId, setNftId] = useParam("id");
+  const node = useRef<any>(null);
   const { data, error } = useSWR<{ data: NFT }>(
     `${NFT_DETAIL_API}/${nftId}`,
     (url) => axios({ url, method: "GET", unmountSignal })
@@ -71,7 +81,11 @@ function NftScreen() {
         <Collection nft={nft} />
 
         <PinchToZoom>
-          <Media item={nft} numColumns={1} />
+          <View ref={setNode2AncestorRef}>
+            <SharedElement onNode={(n) => setNode2(n)}>
+              <Media item={nft} numColumns={1} />
+            </SharedElement>
+          </View>
         </PinchToZoom>
 
         <Social nft={nft} />

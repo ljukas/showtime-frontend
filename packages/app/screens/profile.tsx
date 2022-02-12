@@ -5,6 +5,8 @@ import { Profile } from "app/components/profile";
 import { mixpanel } from "app/lib/mixpanel";
 import { createParam } from "app/navigation/use-param";
 
+import { SharedElementProvider } from "../components/shared-element";
+
 type Query = {
   walletAddress: string;
 };
@@ -18,7 +20,13 @@ const ProfileScreen = withColorScheme(() => {
 
   const [walletAddress, setWalletAddress] = useParam("walletAddress");
 
-  return <Profile walletAddress={walletAddress as string} />;
+  return (
+    <>
+      <SharedElementProvider>
+        <Profile walletAddress={walletAddress as string} />
+      </SharedElementProvider>
+    </>
+  );
 });
 
 export { ProfileScreen };

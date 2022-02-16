@@ -114,7 +114,7 @@ export const SettingsWalletSlot = (props: Props) => {
   const isEthereumAddress = address.startsWith("0x");
   const [connectedAddress] = connector?.session?.accounts;
   const isConnectedAddress =
-    notMagic && connectedAddress.toLowerCase() === address.toLowerCase();
+    notMagic && connectedAddress?.toLowerCase() === address.toLowerCase();
   const multiplePills = isConnectedAddress && mintingEnabled;
 
   return (

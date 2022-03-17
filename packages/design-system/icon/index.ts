@@ -78,3 +78,5 @@ export { default as Flip } from "./Flip";
 export { default as Play } from "./Play";
 export { default as Upload } from "./Upload";
 export { default as Settings } from "./Settings";
+export { default as Muted } from "./Muted";
+export { default as Unmuted } from "./Unmuted";

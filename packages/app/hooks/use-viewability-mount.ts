@@ -31,12 +31,15 @@ export const useViewabilityMount = ({
       videoRef.current?.loadAsync(source, {
         shouldPlay: true,
         isLooping: true,
-        isMuted: videoConfig?.isMuted,
       });
       // if (__DEV__) console.log("📽 : loading ", id);
     }
     loaded.current = true;
   };
+
+  useEffect(() => {
+    videoRef.current?.setIsMutedAsync(!!videoConfig?.muted);
+  }, [videoConfig?.muted]);
 
   const unmount = () => {
     if (loaded.current) {

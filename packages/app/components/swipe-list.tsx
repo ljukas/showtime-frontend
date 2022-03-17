@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, memo } from "react";
+import { useCallback, useMemo, useRef, memo, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -112,12 +112,15 @@ export const SwipeList = ({
     [isRefreshing, refresh]
   );
 
+  const [muted, setMuted] = useState(true);
+
   const videoConfig = useMemo(
     () => ({
-      isMuted: true,
+      muted,
       useNativeControls: false,
+      setMuted,
     }),
-    []
+    [muted, setMuted]
   );
 
   const extendedState = useMemo(() => ({ bottomPadding }), [bottomPadding]);

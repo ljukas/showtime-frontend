@@ -62,6 +62,11 @@ function NFTDropdown({ nft }: Props) {
     nft?.contract_address
   );
 
+  /**
+   * nft.creator_id maps to profile_id within this nft object context
+   * in other scenarios creator_id can also represent a wallet.
+   * vide -> https://showtime-rq88331.slack.com/archives/C02QD3J7DJM/p1647554347354469
+   */
   const isFollowingUser = useMemo(
     () => nft?.owner_id && isFollowing(nft?.creator_id),
     [nft?.creator_id, isFollowing]

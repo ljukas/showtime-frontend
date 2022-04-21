@@ -10,14 +10,15 @@ import { useColorScheme } from "app/lib/color-scheme";
 import { DataProvider, LayoutProvider } from "app/lib/recyclerlistview";
 import { RecyclerListView } from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
+import { breakpoints } from "app/utilities";
 
 import { CreatorPreview, Skeleton, Tabs, Text } from "design-system";
 import { Card } from "design-system/card";
 import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
 
-const CARD_HEIGHT = 860;
-const CARD_WIDTH = 590;
+const CARD_HEIGHT = 880;
+const CARD_WIDTH = 620;
 
 export const Feed = () => {
   return (
@@ -31,70 +32,42 @@ export const Feed = () => {
   );
 };
 
-// TODO: move to separate file
-const SuggestedUsers = () => {
-  const { data, loading } = useFollowSuggestions();
-  const colorMode = useColorScheme();
-  return (
-    <View tw="bg-white dark:bg-black shadow-lg w-[400px] rounded-lg">
-      <Text
-        tw="dark:text-white p-4"
-        //@ts-ignore
-        variant="text-xl"
-      >
-        Suggested
-      </Text>
-      {loading ? (
-        <View tw="m-4">
-          <Skeleton colorMode={colorMode} width={200} height={20} />
-          <View tw="h-4" />
-          <Skeleton colorMode={colorMode} width={140} height={15} />
-        </View>
-      ) : null}
-      {data?.map((user) => {
-        return (
-          <CreatorPreview
-            creator={user}
-            onMediaPress={() => {}}
-            mediaSize={120}
-          />
-        );
-      })}
-    </View>
-  );
-};
-
 export const FeedList = () => {
   const { isAuthenticated } = useUser();
+  const { width } = useWindowDimensions();
 
   return (
     <View tw="flex-row">
-      <View
-        style={{
-          position: Platform.OS === "web" ? "fixed" : null,
-          zIndex: 2,
-          left: 100,
-        }}
-      >
-        <SuggestedUsers />
-      </View>
+      {width > breakpoints["xl"] ? (
+        <View
+          style={{
+            position: Platform.OS === "web" ? "fixed" : null,
+            zIndex: 2,
+            left: 40,
+            width: 320,
+          }}
+        >
+          <SuggestedUsers />
+        </View>
+      ) : null}
+
       <View tw="flex-2">
         {isAuthenticated ? (
           <Tabs.Root>
             <Tabs.List
               contentContainerStyle={tw.style(
-                "justify-center mb-4 mx-2 dark:bg-black bg-white"
+                "justify-center dark:bg-black bg-white"
               )}
             >
               <Tabs.Trigger>
-                <View tw="p-2">
+                <View tw="p-4">
                   <Text variant="text-sm" tw="dark:text-white text-black">
                     Following
                   </Text>
                 </View>
               </Tabs.Trigger>
               <Tabs.Trigger>
-                <View tw="p-2 ml-2">
+                <View tw="p-4 ml-2">
                   <Text variant="text-sm" tw="dark:text-white text-black">
                     For You
                   </Text>
@@ -172,13 +145,11 @@ const NFTScrollList = ({
 
   const _rowRenderer = useCallback((_type: any, item: any, idx) => {
     return (
-      <View tw="w-full flex-row" nativeID="334343">
-        <View tw="flex-2" />
+      <View tw="flex-row justify-center" nativeID="334343">
         <Card
           nft={item}
-          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] mb-8 ml-auto`}
+          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] mb-8`}
         />
-        <View tw="flex-1" />
       </View>
     );
   }, []);
@@ -196,7 +167,10 @@ const NFTScrollList = ({
     <VideoConfigContext.Provider value={videoConfig}>
       <View
         //@ts-ignore
-        style={{ overflowX: Platform.OS === "web" ? "hidden" : undefined }}
+        style={{
+          overflowX: Platform.OS === "web" ? "hidden" : undefined,
+          // backgroundColor: "pink",
+        }}
       >
         <RecyclerListView
           dataProvider={dataProvider}
@@ -208,5 +182,43 @@ const NFTScrollList = ({
         />
       </View>
     </VideoConfigContext.Provider>
+  );
+};
+
+// TODO: move to separate file
+const SuggestedUsers = () => {
+  const { data, loading } = useFollowSuggestions();
+  const colorMode = useColorScheme();
+  return (
+    <>
+      <Text variant="text-2xl" tw="py-8">
+        Home
+      </Text>
+      <View tw="bg-white dark:bg-black shadow-lg rounded-lg">
+        <Text
+          tw="dark:text-white p-4"
+          //@ts-ignore
+          variant="text-lg"
+        >
+          Suggested
+        </Text>
+        {loading ? (
+          <View tw="m-4">
+            <Skeleton colorMode={colorMode} width={100} height={20} />
+            <View tw="h-4" />
+            <Skeleton colorMode={colorMode} width={90} height={15} />
+          </View>
+        ) : null}
+        {data?.map((user) => {
+          return (
+            <CreatorPreview
+              creator={user}
+              onMediaPress={() => {}}
+              mediaSize={90}
+            />
+          );
+        })}
+      </View>
+    </>
   );
 };

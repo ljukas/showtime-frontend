@@ -6404,6 +6404,7 @@ __metadata:
     react-scroll: ^1.8.4
     react-sortablejs: ^6.0.0
     react-string-replace: ^0.4.4
+    react-virtuoso: ^2.10.2
     remove-markdown: ^0.3.0
     resize-observer-polyfill: ^1.5.1
     rudder-sdk-js: ^2.3.6
@@ -9185,6 +9186,24 @@ __metadata:
   peerDependencies:
     react: ">= 16.8.0"
   checksum: 157b08a8588c49db49239a971f49954f2b6bcbbe296caf4562c3a4e61221ed071759144082b3dd55631f22afedc1b8f6b068b38e51bfe303ac18ed513f5f4f71
+  languageName: node
+  linkType: hard
+
+"@virtuoso.dev/react-urx@npm:^0.2.12":
+  version: 0.2.13
+  resolution: "@virtuoso.dev/react-urx@npm:0.2.13"
+  dependencies:
+    "@virtuoso.dev/urx": ^0.2.13
+  peerDependencies:
+    react: ">=16"
+  checksum: 173e91c21f6a8cd506ad3b72af10656897fe1951124ed9eeb1fd85575534993bea2f97cba3f81c08ae1e88a2613df348e2c80d0ceecb3021f8c8c8fe0e053ee2
+  languageName: node
+  linkType: hard
+
+"@virtuoso.dev/urx@npm:^0.2.12, @virtuoso.dev/urx@npm:^0.2.13":
+  version: 0.2.13
+  resolution: "@virtuoso.dev/urx@npm:0.2.13"
+  checksum: 682a99cf40ccc429241268dd37495cd1ed4695ae58b5a1169c75df1630d5dc3fd8eb3aaa655f71c37f39ba9c23c0aaf4401b76d8a986986d1a38a422d596a6ba
   languageName: node
   linkType: hard
 
@@ -27359,6 +27378,19 @@ __metadata:
     react: ">=16.13"
     react-dom: ">=16.13"
   checksum: b8e8939229d463c3c505f7b617925c0228efae0cd6f651371f463846417b06c9170be57df51293a61027c41770f8a090fdb8a08717c4e36290ccb496e0318f1f
+  languageName: node
+  linkType: hard
+
+"react-virtuoso@npm:^2.10.2":
+  version: 2.10.2
+  resolution: "react-virtuoso@npm:2.10.2"
+  dependencies:
+    "@virtuoso.dev/react-urx": ^0.2.12
+    "@virtuoso.dev/urx": ^0.2.12
+  peerDependencies:
+    react: ">=16 || >=17 || >= 18"
+    react-dom: ">=16 || >=17 || >= 18"
+  checksum: d94981eb8244f783e4e763fa31369f98484ce11046487ed0a38032d184496492941a39a3e0ccc30875db0f83a5955179403533ab601da80c1bc3147220e52f72
   languageName: node
   linkType: hard
 

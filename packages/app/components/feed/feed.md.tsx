@@ -2,23 +2,19 @@ import React, { Suspense, useCallback, useMemo, useState } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { ErrorBoundary } from "app/components/error-boundary";
+import { InfiniteScrollList } from "app/components/infinite-scroll-list";
 import { VideoConfigContext } from "app/context/video-config-context";
-import useContentWidth from "app/hooks/use-content-width";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
 import { useUser } from "app/hooks/use-user";
 import { useColorScheme } from "app/lib/color-scheme";
-import {
-  DataProvider,
-  LayoutProvider,
-  RecyclerListView,
-} from "app/lib/recyclerlistview";
 import type { NFT } from "app/types";
 
 import {
   CreatorPreview,
   SegmentedControl,
   Skeleton,
+  Spinner,
   Tabs,
   Text,
 } from "design-system";
@@ -35,7 +31,7 @@ const LEFT_SLIDE_MARGIN = 80;
 
 export const Feed = () => {
   return (
-    <View tw="max-w-7xl flex-1 py-8" testID="homeFeed">
+    <View tw="w-full max-w-5xl py-8" testID="homeFeed">
       <ErrorBoundary>
         <Suspense fallback={<View />}>
           <FeedList />
@@ -45,9 +41,16 @@ export const Feed = () => {
   );
 };
 
+const LoadingIndicator = () => {
+  return (
+    <View tw="mt-8 items-center">
+      <Spinner />
+    </View>
+  );
+};
+
 export const FeedList = () => {
   const { isAuthenticated } = useUser();
-  const { width } = useWindowDimensions();
   const [selected, setSelected] = useState(1);
 
   return (
@@ -67,7 +70,7 @@ export const FeedList = () => {
       <View tw="flex-1">
         {isAuthenticated ? (
           <>
-            <View tw="mr-6 w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black">
+            <View tw="w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black">
               <SegmentedControl
                 values={["FOLLOWING", "FOR YOU"]}
                 onChange={setSelected}
@@ -81,12 +84,12 @@ export const FeedList = () => {
             >
               <Tabs.Pager>
                 <ErrorBoundary>
-                  <Suspense fallback={<View />}>
+                  <Suspense fallback={<LoadingIndicator />}>
                     <FollowingFeed />
                   </Suspense>
                 </ErrorBoundary>
                 <ErrorBoundary>
-                  <Suspense fallback={<View />}>
+                  <Suspense fallback={<LoadingIndicator />}>
                     <AlgorithmicFeed />
                   </Suspense>
                 </ErrorBoundary>
@@ -94,7 +97,11 @@ export const FeedList = () => {
             </Tabs.Root>
           </>
         ) : (
-          <CuratedFeed />
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingIndicator />}>
+              <CuratedFeed />
+            </Suspense>
+          </ErrorBoundary>
         )}
       </View>
     </View>
@@ -126,48 +133,6 @@ const NFTScrollList = ({
   data: NFT[];
   fetchMore: any;
 }) => {
-  const { width: screenWidth, height } = useWindowDimensions();
-  const contentWidth = useContentWidth(LEFT_SLIDE_MARGIN + LEFT_SLIDE_WIDTH);
-
-  let dataProvider = useMemo(
-    () =>
-      new DataProvider((r1, r2) => {
-        return r1.nft_id !== r2.nft_id;
-      }).cloneWithRows(data),
-    [data]
-  );
-
-  const _layoutProvider = useMemo(
-    () =>
-      new LayoutProvider(
-        () => {
-          return "item";
-        },
-        (_type, dim) => {
-          dim.width = contentWidth;
-          dim.height = CARD_HEIGHT;
-        }
-      ),
-    [screenWidth]
-  );
-  const layoutSize = useMemo(
-    () => ({
-      width: contentWidth - LEFT_SLIDE_MARGIN,
-      height,
-    }),
-    [screenWidth]
-  );
-  const _rowRenderer = useCallback((_type: any, item: any, idx) => {
-    return (
-      <View tw="flex-row pl-4" nativeID="334343">
-        <Card
-          nft={item}
-          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
-        />
-      </View>
-    );
-  }, []);
-
   const videoConfig = useMemo(
     () => ({
       isMuted: true,
@@ -177,24 +142,29 @@ const NFTScrollList = ({
     []
   );
 
-  return (
-    <VideoConfigContext.Provider value={videoConfig}>
-      <View
-        style={{
-          //@ts-ignore
-          overflowX: Platform.OS === "web" ? "hidden" : undefined,
-        }}
-      >
-        <RecyclerListView
-          dataProvider={dataProvider}
-          layoutProvider={_layoutProvider}
-          useWindowScroll
-          rowRenderer={_rowRenderer}
-          onEndReached={fetchMore}
-          onEndReachedThreshold={300}
-          layoutSize={layoutSize}
+  const renderItem = useCallback(({ item }) => {
+    return (
+      <View tw="flex-row justify-end">
+        <Card
+          nft={item}
+          tw={`w-[${CARD_WIDTH}px] h-[${CARD_HEIGHT - 32}px] my-4`}
         />
       </View>
+    );
+  }, []);
+
+  const keyExtractor = useCallback((item) => {
+    return item.nft_id;
+  }, []);
+
+  return (
+    <VideoConfigContext.Provider value={videoConfig}>
+      <InfiniteScrollList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        onEndReached={fetchMore}
+      />
     </VideoConfigContext.Provider>
   );
 };

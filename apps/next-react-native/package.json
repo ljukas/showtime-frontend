@@ -74,6 +74,7 @@
     "react-scroll": "^1.8.4",
     "react-sortablejs": "^6.0.0",
     "react-string-replace": "^0.4.4",
+    "react-virtuoso": "^2.10.2",
     "remove-markdown": "^0.3.0",
     "resize-observer-polyfill": "^1.5.1",
     "rudder-sdk-js": "^2.3.6",

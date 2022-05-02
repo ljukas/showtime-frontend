@@ -38,13 +38,13 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
     );
   }
 
-  const size = tw
-    ? tw
-    : numColumns === 3
-    ? "w-[350px] max-w-[30vw]"
-    : numColumns === 2
-    ? "w-[50vw]"
-    : "w-[100vw]";
+  // const size = tw
+  //   ? tw
+  //   : numColumns === 3
+  //   ? "w-[350px] max-w-[30vw]"
+  //   : numColumns === 2
+  //   ? "w-[50vw]"
+  //   : "w-[100vw]";
 
   return (
     <View
@@ -53,7 +53,7 @@ function Card({ nft, numColumns, tw, onPress }: Props) {
         boxShadow: isDark ? CARD_DARK_SHADOW : undefined,
       }}
       tw={[
-        size,
+        "flex-1",
         numColumns >= 3 ? "m-4" : numColumns === 2 ? "m-2" : "",
         nft?.loading ? "opacity-50" : "opacity-100",
         "overflow-hidden rounded-2xl shadow-lg",

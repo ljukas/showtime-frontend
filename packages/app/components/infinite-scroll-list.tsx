@@ -1,18 +1,8 @@
-import * as React from "react";
+import React, { useCallback, useMemo } from "react";
 
-import { Virtuoso } from "react-virtuoso";
+import { VirtuosoGrid } from "react-virtuoso";
 
-type Props = {
-  renderItem: ({ item, index }: { item: any; index: any }) => React.ReactNode;
-  keyExtractor: (item: any, index: number) => string;
-  data: any[];
-  onEndReached?: () => void;
-  ItemSeparatorComponent?: () => any;
-  ListHeaderComponent?: () => any;
-  ListFooterComponent?: () => any;
-};
-
-export const InfiniteScrollList = (props: Props) => {
+export function InfiniteScrollList(props: any) {
   const {
     renderItem,
     keyExtractor: _keyExtractor,
@@ -21,22 +11,24 @@ export const InfiniteScrollList = (props: Props) => {
     ListHeaderComponent,
     ListFooterComponent,
     ItemSeparatorComponent,
+    numColumns,
   } = props;
 
   const itemContent = React.useCallback(
     (index: number) => {
-      const element = renderItem({ item: data[index], index });
-      return (
-        <>
-          {index === 0 ? ListHeaderComponent : null}
+      if (data[index]) {
+        const element = renderItem({ item: data[index], index });
+        return (
+          <>
+            {index === 0 ? ListHeaderComponent : null}
+            {element}
+            {index < data.length - 1 ? ItemSeparatorComponent : null}
+            {index === data.length - 1 ? ListFooterComponent : null}
+          </>
+        );
+      }
 
-          {element}
-
-          {index < data.length - 1 ? ItemSeparatorComponent : null}
-
-          {index === data.length - 1 ? ListFooterComponent : null}
-        </>
-      );
+      return null;
     },
     [
       data,
@@ -47,12 +39,45 @@ export const InfiniteScrollList = (props: Props) => {
     ]
   );
 
-  return (
-    <Virtuoso
-      useWindowScroll
-      totalCount={data.length}
-      itemContent={itemContent}
-      endReached={onEndReached}
-    />
+  const ListContainer = useCallback(
+    React.forwardRef((props: any, ref: any) => {
+      return (
+        <div
+          {...props}
+          style={{ ...props.style, display: "flex", flexWrap: "wrap" }}
+          ref={ref}
+        />
+      );
+    }),
+    [numColumns]
   );
-};
+
+  const ItemContainer = useCallback(
+    React.forwardRef((props: any, ref: any) => {
+      const width = numColumns ? `${100 / numColumns}%` : "100%";
+      return <div {...props} style={{ ...props.style, width }} ref={ref} />;
+    }),
+    [numColumns]
+  );
+
+  const gridProps = useMemo(
+    () => ({
+      Item: ItemContainer,
+      List: ListContainer,
+    }),
+    [ItemContainer, ListContainer]
+  );
+
+  return (
+    <>
+      <VirtuosoGrid
+        useWindowScroll
+        totalCount={data.length}
+        //@ts-ignore
+        components={gridProps}
+        endReached={onEndReached}
+        itemContent={itemContent}
+      />
+    </>
+  );
+}

@@ -182,27 +182,22 @@ const NFTList = ({ days }: { days: any }) => {
     days,
   });
 
-  const [containerWidth, setContainerWidth] = useState(0);
-
   const { width } = useWindowDimensions();
 
-  const renderItem = useCallback(
-    ({ item, index }: any) => {
-      return (
-        <View tw="flex-1">
-          <Card
-            nft={item}
-            onPress={() =>
-              router.push(
-                `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
-              )
-            }
-          />
-        </View>
-      );
-    },
-    [containerWidth]
-  );
+  const renderItem = useCallback(({ item, index }: any) => {
+    return (
+      <View tw="flex-1 p-2 py-4">
+        <Card
+          nft={item}
+          onPress={() =>
+            router.push(
+              `/list?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
+            )
+          }
+        />
+      </View>
+    );
+  }, []);
 
   const keyExtractor = useCallback((item) => {
     return item.nft_id;
@@ -210,12 +205,11 @@ const NFTList = ({ days }: { days: any }) => {
 
   const numColumns = width >= breakpoints["lg"] ? 3 : 2;
 
-  // return <div style={{ height: 200, width: 300, background: "red" }} />;
   return (
     <InfiniteScrollList
       data={data}
       renderItem={renderItem}
-      numColumns={3}
+      numColumns={numColumns}
       keyExtractor={keyExtractor}
     />
   );

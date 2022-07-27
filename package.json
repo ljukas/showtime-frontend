@@ -19,6 +19,7 @@
     "eslint-plugin-react-hooks": "^4.5.0",
     "eslint-plugin-unused-imports": "1.1.5",
     "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
     "patch-package": "^6.4.7",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "0.1.10",
@@ -34,6 +35,16 @@
     "apps/storybook-react-native",
     "packages/*"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css}": [
+      "yarn lint"
+    ]
+  },
   "scripts": {
     "dev": "yarn turbo run dev --parallel --no-cache",
     "dev:expo": "yarn turbo run dev --parallel --no-cache  --scope=@showtime/expo",

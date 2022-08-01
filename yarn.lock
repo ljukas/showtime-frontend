@@ -7940,7 +7940,7 @@ __metadata:
     jest-expo: ^45.0.1
     jest-next-dynamic: ^1.0.1
     metro-minify-esbuild: ^0.2.0
-    moti: ^0.18.0
+    moti: canary
     node-libs-react-native: ^1.2.1
     path-browserify: 1.0.1
     process: ^0.11.0
@@ -20109,7 +20109,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^6.3.0":
+"framer-motion@npm:^6.3.0, framer-motion@npm:^6.5.1":
   version: 6.5.1
   resolution: "framer-motion@npm:6.5.1"
   dependencies:
@@ -26224,13 +26224,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moti@npm:0.18.0, moti@npm:^0.18.0":
+"moti@npm:0.18.0":
   version: 0.18.0
   resolution: "moti@npm:0.18.0"
   dependencies:
     "@motify/components": ^0.18.0
     "@motify/core": ^0.18.0
   checksum: cef1e439faaa98fc0600fe3e65e37e57edadc1378fea315221a9d1574517f5beb53a01ff9d2c4a09026c1bdaeebd0eb561e92c7081fd41a2c58d0f22af11eb43
+  languageName: node
+  linkType: hard
+
+"moti@npm:canary":
+  version: 0.19.0-alpha.6
+  resolution: "moti@npm:0.19.0-alpha.6"
+  dependencies:
+    framer-motion: ^6.5.1
+  peerDependencies:
+    react-native-reanimated: "*"
+  checksum: f1e7bf5957442c56c3564f3e0a2125f4b9f07924b1bf9f2e690abcb3936a07c263abc1a7e2aec28d3b39e4a7511dbf1485457f955d690104a347af0a0d1ce286
   languageName: node
   linkType: hard
 

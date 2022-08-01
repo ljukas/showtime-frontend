@@ -156,7 +156,7 @@
     "expo-updates": "~0.14.3",
     "https-browserify": "~1.0.0",
     "inherits": "^2.0.1",
-    "moti": "^0.18.0",
+    "moti": "canary",
     "node-libs-react-native": "^1.2.1",
     "path-browserify": "1.0.1",
     "process": "^0.11.0",
@@ -302,7 +302,7 @@
       "@testing-library/jest-native/extend-expect"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|@sentry/.*|native-base|react-native-svg|@walletconnect/.*|@motify/.*|solito|moti|@biconomy/.*|@react-three/.*|@babel/.*)"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|@sentry/.*|native-base|react-native-svg|@walletconnect/.*|solito|moti|@biconomy/.*|@react-three/.*|@babel/.*)"
     ]
   }
 }

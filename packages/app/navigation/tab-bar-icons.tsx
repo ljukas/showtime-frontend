@@ -17,6 +17,7 @@ import {
 } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import type { TW } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -57,14 +58,14 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
 
     return (
       <Link href={tab}>
-        <PressableHover
+        <View
           tw={[
             "h-12 w-12 items-center justify-center rounded-full md:bg-gray-100 md:dark:bg-gray-900",
             tw ?? "",
           ]}
         >
           {children}
-        </PressableHover>
+        </View>
       </Link>
     );
   }
@@ -136,7 +137,13 @@ export const CreateTabBarIcon = ({ focused }: TabBarIconProps) => {
           width={24}
           height={24}
           color={
-            focused ? (isDark ? "#FFF" : "#000") : isDark ? "#000" : "#FFF"
+            focused
+              ? isDark
+                ? colors.white
+                : colors.gray[900]
+              : isDark
+              ? colors.gray[900]
+              : colors.white
           }
         />
       </View>

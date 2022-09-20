@@ -5,7 +5,7 @@ import Constants from "expo-constants";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
+import { Modal } from "@showtime-xyz/universal.modal";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Switch } from "@showtime-xyz/universal.switch";
 import {
@@ -110,13 +110,7 @@ const SettingsTabs = () => {
     [user?.data.profile.wallet_addresses_v2]
   );
 
-  const wallets = useMemo(
-    () =>
-      user?.data.profile.wallet_addresses_v2.filter(
-        (wallet) => !wallet.is_email && !wallet.is_phone
-      ),
-    [user?.data.profile.wallet_addresses_v2]
-  );
+  const wallets = user?.data.profile.wallet_addresses_v2;
 
   const phoneNumberWallets = useMemo(
     () =>
@@ -343,7 +337,7 @@ const SettingsTabs = () => {
   const renderHeader = useCallback(() => {
     return (
       <>
-        {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
+        {Platform.OS !== "web" && <View style={{ height: headerHeight }} />}
         <View tw="dark:shadow-dark shadow-light items-center bg-white dark:bg-black md:mb-4">
           <View tw="w-full max-w-screen-2xl flex-row justify-between self-center px-4 py-4 md:py-0">
             <Text tw="font-space-bold self-center text-2xl font-extrabold text-gray-900 dark:text-white">
@@ -394,10 +388,12 @@ const SettingsTabs = () => {
         style={{ zIndex: 1 }}
       />
       <View style={{ height: bottomHeight }} />
-      <EditNicknameModal
-        editingWallet={editingWallet}
-        onClose={() => setEditingWallet(undefined)}
-      />
+      {editingWallet ? (
+        <EditNicknameModal
+          editingWallet={editingWallet}
+          onClose={() => setEditingWallet(undefined)}
+        />
+      ) : null}
     </View>
   );
 };
@@ -421,12 +417,7 @@ const EditNicknameModal = ({
   }, [editingWallet?.nickname]);
 
   return (
-    <ModalSheet
-      title="Edit Nickname"
-      visible={!!editingWallet}
-      close={onClose}
-      onClose={onClose}
-    >
+    <Modal tw="bottom-16 md:bottom-0" onClose={onClose} title="Edit Nickname">
       <View tw="p-4">
         <Fieldset
           placeholder="rainbow wallet"
@@ -447,7 +438,7 @@ const EditNicknameModal = ({
           Submit
         </Button>
       </View>
-    </ModalSheet>
+    </Modal>
   );
 };
 

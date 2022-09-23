@@ -20,8 +20,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
-import { useShare } from "app/hooks/use-share";
-import { useRudder } from "app/lib/rudderstack";
+import { useShareProfile } from "app/hooks/use-share-profile";
 import type { Profile } from "app/types";
 
 type Props = {
@@ -29,14 +28,13 @@ type Props = {
 };
 
 function ProfileDropdown({ user }: Props) {
-  const { rudder } = useRudder();
   const { report } = useReport();
   const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
-  const share = useShare();
   const { width } = useWindowDimensions();
   const isBlocked = getIsBlocked(user.profile_id);
   const isDark = useIsDarkMode();
+  const shareProfile = useShareProfile();
 
   return (
     <DropdownMenuRoot>
@@ -52,20 +50,8 @@ function ProfileDropdown({ user }: Props) {
 
       <DropdownMenuContent loop>
         <DropdownMenuItem
-          onSelect={async () => {
-            const result = await share({
-              url: `https://showtime.xyz/${
-                user?.username ??
-                user?.wallet_addresses_excluding_email_v2?.[0]?.address
-              }`,
-            });
-
-            if (result.action === "sharedAction") {
-              rudder?.track(
-                "User Shared",
-                result.activityType ? { type: result.activityType } : undefined
-              );
-            }
+          onSelect={() => {
+            shareProfile(user);
           }}
           key="share"
         >

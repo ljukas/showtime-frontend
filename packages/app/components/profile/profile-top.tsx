@@ -11,6 +11,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Share } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
@@ -28,6 +29,7 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFollow } from "app/hooks/use-follow";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
+import { useShareProfile } from "app/hooks/use-share-profile";
 import { TextLink } from "app/navigation/link";
 
 import { Hidden } from "design-system/hidden";
@@ -116,6 +118,7 @@ export const ProfileTop = ({
     () => profileId && isFollowing(profileId),
     [profileId, isFollowing]
   );
+  const shareProfile = useShareProfile();
   const { unblock } = useBlock();
   const { onToggleFollow } = useFollow({
     username: profileData?.profile.username,
@@ -341,6 +344,20 @@ export const ProfileTop = ({
                       Drop Free NFT
                     </Button>
                   ) : null}
+
+                  <PressableScale
+                    onPress={() => {
+                      shareProfile(profileData?.profile);
+                    }}
+                  >
+                    <View tw="mx-2">
+                      <Share
+                        height={32}
+                        width={22}
+                        color={isDark ? "#FFF" : colors.gray[900]}
+                      />
+                    </View>
+                  </PressableScale>
                 </>
               )}
             </View>
